@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Certificate • {{ course.title }}</title>
+<style>
+body{margin:0;font-family:"Inter",system-ui;background:linear-gradient(135deg,#0f172a,#1e293b);color:#e2e8f0;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.container{max-width:700px;width:100%;padding:24px}
+.card{background:rgba(15,23,42,0.9);padding:32px;border-radius:20px;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 24px rgba(0,0,0,0.45);text-align:center}
+.h1{font-size:28px;font-weight:700;background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0}
+.meta{color:#94a3b8;margin-top:12px;font-size:15px}
+.btn{padding:12px 20px;border-radius:12px;border:0;cursor:pointer;font-size:15px;font-weight:600;transition:.25s all ease-in-out;display:inline-block;text-decoration:none}
+.download{background:linear-gradient(135deg,#22d3ee,#5b9cff);color:#0f172a}
+.download:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(34,211,238,0.35)}
+.note{color:#f87171;margin-top:18px;font-size:14px}
+.link{color:#94a3b8;text-decoration:none;font-size:14px;transition:.2s}
+.link:hover{color:#22d3ee}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <div class="h1">Certificate • {{ course.title }}</div>
+    <div class="meta">Student: {{ user.name }} | Score: {{ mark.score }} | Date: {{ mark.created_at.split('T')[0] if mark.created_at }}</div>
+
+    {% if eligible %}
+      <div style="margin-top:20px">
+        <a class="btn download" href="{{ url_for('download_certificate', course_id=course.id) }}">Download PDF Certificate</a>
+      </div>
+    {% else %}
+      <div class="note">Score must be at least 10 to get a certificate. Try again.</div>
+    {% endif %}
+
+    <div style="margin-top:22px">
+      <a href="{{ url_for('student_index') }}" class="link">← Back to Courses</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

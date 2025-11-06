@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Courses • Learning Hub</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #0f1c2c;
+  --panel-bg: rgba(20, 30, 50, 0.85);
+  --text: #e0e0e0;
+  --muted: #a0a0a0;
+  --accent: #4fd1c5;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --hover: rgba(79, 209, 197, 0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(rgba(15,28,44,0.7), rgba(15,28,44,0.7)), url('/static/student.jpg') center/cover no-repeat fixed;
+  color: var(--text);
+  min-height: 100vh;
+}
+.container { max-width: 1300px; margin: 0 auto; padding: 50px 30px; }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+}
+.brand { font-weight: 700; font-size: 1.8rem; color: var(--text); letter-spacing: 1px; }
+.btn {
+  padding: 12px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.btn-ghost {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: var(--text);
+}
+.btn-ghost:hover { background: var(--hover); transform: translateY(-2px); }
+h2 { margin-bottom: 30px; font-size: 2.25rem; font-weight: 700; color: var(--text); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+.card {
+  background: var(--panel-bg);
+  border-radius: 18px;
+  padding: 28px;
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(0,0,0,0.6); }
+.card > * { position: relative; z-index: 1; }
+.title { font-weight: 700; margin: 12px 0 8px; font-size: 1.4rem; color: var(--text); }
+.desc { color: var(--muted); font-size: 1rem; margin-bottom: 18px; line-height: 1.5; }
+.badge { display: inline-block; padding: 6px 12px; border-radius: 12px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); font-size: 12px; color: var(--muted); }
+.enroll-btn { width: 100%; padding: 14px; border-radius: 12px; border: 0; font-weight: 700; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
+.enrolled { background: var(--accent); color: #000; }
+.enroll-btn:not(.enrolled) { background: rgba(255,255,255,0.15); color: var(--text); border: 1px solid rgba(255,255,255,0.25); }
+.enroll-btn:hover { transform: translateY(-2px); }
+.flash { position: fixed; right: 20px; top: 20px; z-index: 50; }
+.flash div { background: rgba(0,0,0,0.6); padding: 14px 18px; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); font-size: 0.95rem; }
+@media(max-width:880px){.grid{grid-template-columns:1fr}}
+#chatbot-fab { position: fixed; bottom: 25px; right: 25px; background: var(--accent); color: #000; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; cursor: pointer; box-shadow: 0 4px 18px rgba(0,0,0,0.3); z-index: 100; }
+#chatbot-window { position: fixed; bottom: 100px; right: 25px; width: 320px; max-height: 450px; background: var(--panel-bg); border-radius: 14px; border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(12px); display: none; flex-direction: column; overflow: hidden; z-index: 100; }
+#chatbot-header { background: var(--accent); color: #000; padding: 12px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+#chatbot-header #chatbot-close { cursor: pointer; font-weight: bold; }
+#chatbot-messages { padding: 12px; flex: 1; overflow-y: auto; font-size: 0.95rem; }
+#chatbot-messages p { margin: 6px 0; }
+#chatbot-messages .user { text-align: right; color: var(--accent); }
+#chatbot-messages .bot { text-align: left; color: var(--text); }
+#chatbot-input { display: flex; border-top: 1px solid rgba(255,255,255,0.25); }
+#chatbot-input input { flex: 1; padding: 10px; border: none; outline: none; background: rgba(255,255,255,0.05); color: var(--text); }
+#chatbot-input button { background: var(--accent); border: none; color: #000; padding: 0 14px; cursor: pointer; }
+
+.roadmap {
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.roadmap h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.roadmap .steps {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.step {
+  background: var(--panel-bg);
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s;
+  min-width: 200px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.step:hover {
+  transform: translateY(-5px);
+}
+
+.step.completed {
+  background: rgba(16, 185, 129, 0.2);
+  border: 2px solid var(--success);
+}
+
+.step.in-progress {
+  background: rgba(245, 158, 11, 0.2);
+  border: 2px solid var(--warning);
+}
+
+.step.locked {
+  opacity: 0.5;
+  pointer-events: none;
+  background: rgba(239, 68, 68, 0.2);
+  border: 2px solid var(--danger);
+}
+
+.step h3 {
+  color: var(--text);
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.step p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.step .status {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+}
+
+.step.completed .status { color: var(--success); }
+.step.in-progress .status { color: var(--warning); }
+.step.locked .status { color: var(--danger); }
+
+.aptitude-progress {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.progress-bar {
+  width: 100%;
+  max-width: 300px;
+  height: 10px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 10px auto;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+  border-radius: 5px;
+}
+
+.progress-text {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.section-title {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 40px 0 20px;
+  padding: 10px;
+  background: var(--panel-bg);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+}
+
+.aptitude-tab {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.aptitude-tab button {
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.aptitude-tab button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(79, 209, 197, 0.4);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: var(--panel-bg);
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 16px;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.close {
+  color: var(--text);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--accent);
+}
+
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  padding: 12px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.3s;
+}
+
+.modal-buttons button:hover {
+  transform: translateY(-2px);
+}
+
+.blocked-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 20px;
+  background: rgba(255,0,0,0.2);
+  border: 1px solid rgba(255,0,0,0.3);
+  border-radius: 12px;
+  color: #ffcccc;
+  font-size: 1.1rem;
+  margin: 20px 0;
+}
+
+.enrolled-card {
+  border: 2px solid var(--accent);
+}
+
+.completed-card {
+  background: rgba(79, 209, 197, 0.1);
+  border: 2px solid var(--accent);
+}
+
+.score-badge {
+  background: var(--success);
+  color: #000;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 10px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand">Hello, {{ user.name }}</div>
+    <div>
+      <a class="btn btn-ghost" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+
+  <div class="roadmap">
+    <h2>Learning Roadmap</h2>
+    
+    <!-- Aptitude Progress Bar -->
+    <div class="aptitude-progress">
+      <p class="progress-text">Aptitude Progress: {{ "%.0f"|format(aptitude_progress) }}%</p>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: {{ aptitude_progress }}%"></div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <!-- Individual Aptitude Steps -->
+      {% for detail in aptitude_details %}
+      <div class="step {{ detail.status_class }}">
+        <h3>{{ detail.title }}</h3>
+        <p>Enrolled: {{ 'Yes' if detail.enrolled else 'No' }}</p>
+        {% if detail.score is not none %}
+        <p>Score: {{ detail.score }}/?? <span class="score-badge">{% if detail.score >= 10 %}Passed{% else %}Failed{% endif %}</span></p>
+        {% endif %}
+        <div class="status">{{ detail.status_text }}</div>
+      </div>
+      {% endfor %}
+
+      <!-- Unlock Arrow Step -->
+      <div class="step {% if aptitude_done %}completed{% else %}locked{% endif %}">
+        <h3>→</h3>
+        <p>Unlock Main Courses</p>
+        <div class="status">{% if aptitude_done %}Unlocked{% else %}Locked{% endif %}</div>
+      </div>
+
+      <!-- Main Courses Step -->
+      <div class="step {% if aptitude_done %}completed{% else %}locked{% endif %}">
+        <h3>Main Courses</h3>
+        <p>IT & Business courses available after aptitude.</p>
+        <div class="status">{% if aptitude_done %}{{ non_aptitude_courses|length }} Available{% else %}Complete Aptitude First{% endif %}</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Aptitude Training</h2>
+  <div class="grid">
+    <div class="aptitude-tab">
+      <button onclick="openModal()">Start Aptitude Training</button>
+    </div>
+
+    {% for c in aptitude_courses %}
+    <div class="card {% if c.enrolled %}enrolled-card{% endif %} {% if c.completed == 1 and c.last_score >= 10 %}completed-card{% endif %}">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="badge">{{ c.category }}</div></div>
+        <div style="font-size:13px;color:var(--muted)">Course ID: {{ c.id }}</div>
+      </div>
+      <h3 class="title">{{ c.title }}</h3>
+      <p class="desc">{{ c.description or 'No description provided.' }}</p>
+      {% if c.last_score is not none %}
+      <p style="color: var(--muted); font-size: 0.9rem;">Last Score: {{ c.last_score }} {% if c.last_score >= 10 %}<span style="color: var(--success);">✓ Passed</span>{% else %}<span style="color: var(--danger);">✗ Retry</span>{% endif %}</p>
+      {% endif %}
+      {% if c.enrolled %}
+        <a class="enroll-btn enrolled" href="{{ url_for('course_detail', course_id=c.id) }}">Open Course</a>
+      {% else %}
+        <form method="post" action="{{ url_for('enroll', course_id=c.id) }}">
+          <button type="submit" class="enroll-btn">Enroll</button>
+        </form>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if not aptitude_done %}
+  <div class="blocked-message">
+    Complete and pass all Aptitude courses (score ≥10 each) to unlock main courses.
+  </div>
+  {% endif %}
+
+  {% if aptitude_done %}
+  <h2>Main Courses</h2>
+  <div class="grid">
+    {% for c in non_aptitude_courses %}
+    <div class="card {% if c.enrolled %}enrolled-card{% endif %} {% if c.completed == 1 and c.last_score >= 10 %}completed-card{% endif %}">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="badge">{{ c.category }}</div></div>
+        <div style="font-size:13px;color:var(--muted)">Course ID: {{ c.id }}</div>
+      </div>
+      <h3 class="title">{{ c.title }}</h3>
+      <p class="desc">{{ c.description or 'No description provided.' }}</p>
+      {% if c.last_score is not none %}
+      <p style="color: var(--muted); font-size: 0.9rem;">
+        Last Score: {{ c.last_score }}
+        {% if c.last_score >= 10 %}
+        <span style="color: var(--success);">✓ Passed</span>
+        {% else %}
+        <span style="color: var(--danger);">✗ Retry</span>
+        {% endif %}
+      </p>
+      {% endif %}
+
+      {% if c.enrolled %}
+        <a class="enroll-btn enrolled" href="{{ url_for('course_detail', course_id=c.id) }}">Open Course</a>
+      {% else %}
+        <form method="post" action="{{ url_for('enroll', course_id=c.id) }}">
+          <button type="submit" class="enroll-btn">Enroll</button>
+        </form>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if aptitude_done and non_aptitude_courses %}
+  <div class="aptitude-progress" style="margin-top: 20px;">
+    <p class="progress-text">Main Courses Available: {{ non_aptitude_courses|length }}</p>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 100%"></div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<div class="flash">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for cat, msg in messages %}
+        <div style="color: {% if cat == 'success' %}var(--success);{% elif cat == 'danger' %}var(--danger);{% else %}var(--warning);{% endif %} border-color: {% if cat == 'success' %}var(--success);{% elif cat == 'danger' %}var(--danger);{% else %}var(--warning);{% endif %};">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+<!-- Aptitude Selection Modal -->
+<div id="aptitudeModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Select Aptitude Module</h2>
+    <p>Choose a module to start. All use the same video but have unique questions.</p>
+    <div class="modal-buttons">
+      <button onclick="selectCourse(1)">Logical Reasoning</button>
+      <button onclick="selectCourse(2)">Quantitative Aptitude</button>
+      <button onclick="selectCourse(3)">Communication Skills</button>
+    </div>
+  </div>
+</div>
+
+<!-- Chatbot Floating Action Button -->
+<div id="chatbot-fab">💬</div>
+<div id="chatbot-window">
+  <div id="chatbot-header">Chat with Bot <span id="chatbot-close">&times;</span></div>
+  <div id="chatbot-messages"></div>
+  <div id="chatbot-input">
+    <input type="text" id="chatbot-msg" placeholder="Type a message..." />
+    <button onclick="sendChat()">Send</button>
+  </div>
+</div>
+
+<script>
+const fab = document.getElementById("chatbot-fab");
+const windowDiv = document.getElementById("chatbot-window");
+const closeBtn = document.getElementById("chatbot-close");
+const messages = document.getElementById("chatbot-messages");
+const input = document.getElementById("chatbot-msg");
+
+fab.onclick = () => { windowDiv.style.display = "flex"; }
+closeBtn.onclick = () => { windowDiv.style.display = "none"; }
+
+function appendMessage(sender, text) {
+  const p = document.createElement("p");
+  p.className = sender;
+  p.innerText = text;
+  messages.appendChild(p);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function sendChat() {
+  const msg = input.value.trim();
+  if (!msg) return;
+  appendMessage("user", msg);
+  input.value = "";
+  fetch("/chatbot", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  })
+  .then(res => res.json())
+  .then(data => { appendMessage("bot", data.response); })
+  .catch(() => { appendMessage("bot", "Oops! Something went wrong."); });
+}
+
+input.addEventListener("keypress", function(e) {
+  if (e.key === "Enter") sendChat();
+});
+
+function openModal() {
+  document.getElementById('aptitudeModal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('aptitudeModal').style.display = 'none';
+}
+
+// Aptitude courses IDs for modal selection (passed from backend)
+const aptCourses = {{ aptitude_courses|map(attribute='id')|list|tojson }};
+
+function selectCourse(aptIndex) {
+  if (aptCourses && aptCourses[aptIndex - 1]) {
+    const courseId = aptCourses[aptIndex - 1];
+    // First enroll if not already enrolled
+    fetch(`/courses/enroll/${courseId}`, { method: 'POST' })
+      .then(() => {
+        window.location.href = `/courses/${courseId}`;
+      })
+      .catch(err => {
+        console.error('Enrollment failed:', err);
+        // Proceed anyway if already enrolled
+        window.location.href = `/courses/${courseId}`;
+      });
+  } else {
+    alert('Course not available. Please contact admin.');
+  }
+  closeModal();
+}
+
+window.onclick = function(event) {
+  const modal = document.getElementById('aptitudeModal');
+  if (event.target == modal) {
+    closeModal();
+  }
+}
+
+// Auto-hide flash messages after 5 seconds
+setTimeout(() => {
+  const flashes = document.querySelectorAll('.flash div');
+  flashes.forEach(flash => {
+    flash.style.opacity = '0';
+    setTimeout(() => flash.remove(), 300);
+  });
+}, 5000);
+</script>
+</body>
+</html>

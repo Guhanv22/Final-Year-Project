@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #2e003e, #4b0082, #5e0d91, #7210a5, #8a2be2, #9932cc, #ba55d3, #dda0dd, #e6c3ff);
+  background-size: 400% 400%;
+  animation: gradientBG 20s ease infinite;
+  color: #fff;
+  min-height: 100vh;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+header h2 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+header a {
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #8a2be2, #dda0dd);
+  color: #fff;
+  font-weight: 600;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+header a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255,255,255,0.4);
+}
+
+.container {
+  padding-top: 100px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 50px;
+}
+
+.course {
+  position: relative;
+  background: rgba(0,0,0,0.25);
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(138,43,226,0.5), 0 0 20px rgba(221,160,221,0.3);
+  backdrop-filter: blur(12px);
+  transition: transform 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+}
+
+.course::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, #8a2be2, #dda0dd, #ba55d3, #9932cc, #5e0d91);
+  animation: rotateBorder 6s linear infinite;
+  z-index: 0;
+}
+
+@keyframes rotateBorder {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.course > * {
+  position: relative;
+  z-index: 1;
+}
+
+.course:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 25px rgba(138,43,226,0.7), 0 0 40px rgba(221,160,221,0.5);
+}
+
+.course h3 {
+  margin-top: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #e6c3ff;
+}
+
+.course p {
+  font-size: 0.95rem;
+  color: #f0e6ff;
+  margin: 10px 0 15px;
+}
+
+.course a {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #8a2be2, #dda0dd);
+  color: #fff;
+  font-weight: 600;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.course a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255,255,255,0.3);
+}
+</style>
+</head>
+<body>
+<header>
+  <h2>Welcome, {{ session.username }}</h2>
+  <a href="/logout">Logout</a>
+</header>
+
+<div class="container">
+  {% for course in courses %}
+  <div class="course">
+    <h3>{{ course[1] }} ({{ course[2] }})</h3>
+    <p>{{ course[3] }}</p>
+    <a href="/course/{{ course[0] }}">View Course</a>
+  </div>
+  {% endfor %}
+</div>
+</body>
+</html>

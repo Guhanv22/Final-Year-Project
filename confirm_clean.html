@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Confirm Cleaning • Admin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .btn { padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .btn:hover { background: #c82333; }
+        .back { background: #6c757d; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>⚠️ Confirm Database Cleaning</h2>
+        <p>{{ message }}</p>
+        <p><strong>Warning:</strong> This is irreversible! Only run once. Duplicates in Aptitude will be deleted (e.g., keeping IDs 1,9,10 or similar earliest uniques).</p>
+        <form method="post">
+            <button class="btn" type="submit">Yes, Clean Now</button>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn back">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

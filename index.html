@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NextStep - Home</title>
+<style>
+:root {
+  --bg:#0b0f19; --panel:rgba(18,24,41,0.65); --muted:#8aa0b4; --text:#e6eef8;
+  --brand:#5b9cff; --accent:#22d3ee; --ok:#22c55e; --warn:#f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Inter",system-ui,Segoe UI,Roboto,Arial;
+  color:var(--text);
+  overflow-x:hidden;
+}
+.container{max-width:1100px;margin:0 auto;padding:28px}
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;position:sticky;top:0;
+  backdrop-filter:blur(12px);z-index:50;
+}
+.brand{
+  display:flex;gap:12px;align-items:center;
+  font-weight:900;font-size:24px;letter-spacing:0.5px;
+}
+.badge{
+  width:14px;height:14px;border-radius:50%;
+  background:linear-gradient(135deg,var(--brand),var(--accent));
+  box-shadow:0 0 15px var(--accent);
+}
+.cta{display:flex;gap:10px}
+.btn{
+  position:relative;overflow:hidden;
+  border:0;padding:10px 16px;border-radius:12px;font-weight:700;
+  cursor:pointer;transition:all 0.25s ease;
+}
+.btn::after{
+  content:"";position:absolute;border-radius:50%;
+  transform:scale(0);background:rgba(255,255,255,0.4);
+  width:100px;height:100px;top:50%;left:50%;
+  pointer-events:none;transition:transform 0.5s ease,opacity 1s ease;
+  opacity:0;
+}
+.btn:active::after{
+  transform:scale(3);opacity:1;transition:0s;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--brand),#7aaeff);
+  color:#081328;box-shadow:0 4px 15px rgba(91,156,255,0.4);
+}
+.btn-primary:hover{
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 6px 25px rgba(91,156,255,0.65);
+}
+.btn-ghost{
+  background:transparent;border:1px solid rgba(255,255,255,0.08);
+  color:var(--text);
+}
+.btn-ghost:hover{
+  background:rgba(255,255,255,0.06);
+  transform:translateY(-2px);
+}
+.hero{
+  display:grid;grid-template-columns:1fr 420px;gap:26px;
+  align-items:center;margin-top:28px;
+}
+.card{
+  background:var(--panel);border-radius:20px;padding:26px;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 15px 45px rgba(0,0,0,0.5);
+  backdrop-filter:blur(14px);
+  animation:fadeUp 0.7s ease;
+}
+.h1{
+  font-size:46px;font-weight:900;line-height:1.2;
+  background:linear-gradient(90deg,var(--brand),var(--accent));
+  -webkit-background-clip:text;color:transparent;
+  margin-bottom:14px;
+}
+.lead{
+  color:var(--muted);margin-bottom:20px;
+  font-size:17px;line-height:1.6;
+}
+.features{
+  display:flex;flex-wrap:wrap;gap:10px;
+}
+.pill{
+  background:rgba(15,20,36,0.75);
+  padding:9px 14px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.05);
+  font-weight:600;color:#bcd7ff;
+  transition:all 0.25s ease;
+  animation:floaty 3s ease-in-out infinite;
+}
+.pill:hover{
+  background:rgba(91,156,255,0.2);
+  transform:translateY(-3px) scale(1.05);
+}
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 18px;
+}
+.feature-item {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.feature-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+.feature-item .icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.feature-item h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.feature-item p {
+  font-size: 14px;
+  color: var(--muted);
+}
+.footer{
+  opacity:.7;margin-top:40px;text-align:center;font-size:14px
+}
+.modal{
+  display:none;position:fixed;inset:0;background:rgba(10,15,30,0.65);
+  backdrop-filter:blur(8px);align-items:center;justify-content:center;
+  padding:18px;z-index:100;
+}
+.modal.show{display:flex;animation:fadeIn 0.3s ease forwards}
+.modal-card{
+  width:100%;max-width:420px;background:rgba(25,32,55,0.85);
+  padding:28px;border-radius:18px;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 10px 40px rgba(0,0,0,0.35);
+  backdrop-filter:blur(14px) saturate(150%);
+  animation:scaleUp 0.4s cubic-bezier(.25,.8,.25,1);
+  position:relative;
+}
+.modal-card .close-btn{
+  position:absolute;top:14px;right:14px;
+  background:rgba(255,255,255,0.08);border:none;width:28px;height:28px;
+  border-radius:50%;color:var(--text);font-size:14px;cursor:pointer;
+  transition:background 0.25s ease;
+}
+.modal-card .close-btn:hover{background:rgba(255,255,255,0.18);}
+.form-group{position:relative;margin-top:14px}
+.input{
+  width:100%;padding:12px 10px;border-radius:10px;
+  border:1px solid rgba(255,255,255,0.1);background:rgba(15,20,36,0.8);
+  color:var(--text);font-size:15px;transition:border-color 0.25s ease;
+}
+.input:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(91,156,255,0.3);outline:none;}
+.form-group label{
+  position:absolute;left:12px;top:12px;font-size:14px;color:var(--muted);
+  pointer-events:none;transition:0.25s ease;
+}
+.input:focus + label,
+.input:not(:placeholder-shown) + label{
+  top:-7px;font-size:12px;color:var(--brand);
+  background:rgba(25,32,55,0.85);padding:0 4px;border-radius:4px;
+}
+@media(max-width:880px){
+  .hero{grid-template-columns:1fr;margin-top:18px}
+  .cta{flex-direction:column}
+  .feature-grid {grid-template-columns: 1fr;}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0} to{opacity:1}}
+@keyframes scaleUp{from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)}}
+@keyframes floaty{0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)}}
+</style>
+</head>
+<body>
+<video autoplay muted loop id="bg-video" style="position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2;">
+  <source src="{{ url_for('static', filename='bg.mp4') }}" type="video/mp4">
+</video>
+<div id="bg-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;"></div>
+
+<div class="container">
+  <div class="header">
+    <div class="brand"><span class="badge"></span>NextStep</div>
+    <div class="cta">
+      <button class="btn btn-ghost" onclick="openModal('user')">User</button>
+      <button class="btn btn-primary" onclick="openModal('admin')">Admin</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="card">
+      <div class="h1">Learn. Practice. Get Certified.</div>
+      <div class="lead">Video-based courses, interactive quizzes and PDF certificates — all in one lightweight app.</div>
+      <div class="features">
+        <div class="pill">▶ Course Videos</div>
+        <div class="pill">✍️ Interactive Quizzes</div>
+        <div class="pill">📄 PDF Certificates</div>
+        <div class="pill">🔐 User & Admin</div>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a class="btn btn-primary" href="#" onclick="openModal('user')">🚀 Get Started (User)</a>
+        <a class="btn btn-ghost" href="#" onclick="openModal('admin')">🛠 Admin Login</a>
+      </div>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="icon">🎓</div>
+        <h4>Quality Learning</h4>
+        <p>Access curated, expert-led video courses on-demand.</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">💡</div>
+        <h4>Test Your Skills</h4>
+        <p>Engage with interactive quizzes to reinforce knowledge.</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">📜</div>
+        <h4>Get Certified</h4>
+        <p>Earn PDF certificates to boost your professional profile.</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">📈</div>
+        <h4>Track Progress</h4>
+        <p>View your learning stats and improve over time.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:50px;text-align:center;">
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:20px;">Our Impact</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;">
+      <div class="card" style="flex:1;min-width:220px;max-width:260px;">
+        <div id="stat-users" data-suffix="+" style="font-size:34px;font-weight:900;color:var(--accent);">0</div>
+        <div class="small">Users Enrolled</div>
+      </div>
+      <div class="card" style="flex:1;min-width:220px;max-width:260px;">
+        <div id="stat-courses" data-suffix="+" style="font-size:34px;font-weight:900;color:var(--ok);">0</div>
+        <div class="small">Courses Offered</div>
+      </div>
+      <div class="card" style="flex:1;min-width:220px;max-width:260px;">
+        <div id="stat-success" data-suffix="%" style="font-size:34px;font-weight:900;color:var(--warn);">0</div>
+        <div class="small">Certification Success Rate</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:50px;text-align:center;">
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:20px;">What Our Users Say</h2>
+    <div id="quote-carousel" class="card" style="max-width:600px;margin:0 auto;font-size:18px;line-height:1.6;">
+      <p id="quote-text">"This platform made learning fun and easy!"</p>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px;" id="quote-author">– Priya S., Data Science User</div>
+    </div>
+  </div>
+
+  <div class="footer">© {{ 2025 }} Learning Hub</div>
+</div>
+
+<div class="flash">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for cat,msg in messages %}
+        <div class="alert alert-{{ 'danger' if cat=='danger' else 'success' }}">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+<div id="user-modal" class="modal">
+  <div class="modal-card">
+    <button class="close-btn" onclick="closeModal('user')">✕</button>
+    <h2 style="text-align:center;margin-bottom:12px;">User Login</h2>
+    <form method="post" action="{{ url_for('login') }}">
+      <div class="form-group">
+        <input class="input" name="email" type="email" placeholder=" " required>
+        <label>Email</label>
+      </div>
+      <div class="form-group">
+        <input class="input" name="password" type="password" placeholder=" " required>
+        <label>Password</label>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:16px;">Login</button>
+    </form>
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:18px 0;">
+    <form method="post" action="{{ url_for('register') }}">
+      <h3 style="text-align:center;margin-bottom:12px;">Register</h3>
+      <div class="form-group">
+        <input class="input" name="name" type="text" placeholder=" " required>
+        <label>Full Name</label>
+      </div>
+      <div class="form-group">
+        <input class="input" name="email" type="email" placeholder=" " required>
+        <label>Email</label>
+      </div>
+      <div class="form-group">
+        <input class="input" name="password" type="password" placeholder=" " required>
+        <label>Password</label>
+      </div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:16px;">Register</button>
+    </form>
+  </div>
+</div>
+
+<div id="admin-modal" class="modal">
+  <div class="modal-card">
+    <button class="close-btn" onclick="closeModal('admin')">✕</button>
+    <h2 style="text-align:center;margin-bottom:12px;">Admin Login</h2>
+    <form method="post" action="{{ url_for('admin_login') }}">
+      <div class="form-group">
+        <input class="input" name="username" type="text" placeholder=" " required>
+        <label>Username</label>
+      </div>
+      <div class="form-group">
+        <input class="input" name="password" type="password" placeholder=" " required>
+        <label>Password</label>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:16px;">Login</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function openModal(kind){document.getElementById(kind+'-modal').classList.add('show');}
+function closeModal(kind){document.getElementById(kind+'-modal').classList.remove('show');}
+const quotes=[
+  {text:'"This platform made learning fun and easy!"',author:"– Priya S., Data Science User"},
+  {text:'"The quizzes really helped me test my knowledge."',author:"– Arjun M., Web Development User"},
+  {text:'"The PDF certificate helped me land my first internship."',author:"– Sneha K., AI & ML Enthusiast User"},
+  {text:'"High-quality video courses with amazing explanations."',author:"– Rahul P., Python Learner User"}
+];
+let currentQuote=0;
+function changeQuote(){
+  currentQuote=(currentQuote+1)%quotes.length;
+  document.getElementById("quote-text").textContent=quotes[currentQuote].text;
+  document.getElementById("quote-author").textContent=quotes[currentQuote].author;
+}
+setInterval(changeQuote,4000);
+function animateValue(id,start,end,duration){
+  let startTime=null;
+  const element=document.getElementById(id);
+  function step(timestamp){
+    if(!startTime) startTime=timestamp;
+    const progress=Math.min((timestamp-startTime)/duration,1);
+    const value=Math.floor(progress*(end-start)+start);
+    element.textContent=value+(element.dataset.suffix||'');
+    if(progress<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+animateValue('stat-users',0,1250,1800);
+animateValue('stat-courses',0,45,1800);
+animateValue('stat-success',0,92,1800);
+</script>
+</body>
+</html>

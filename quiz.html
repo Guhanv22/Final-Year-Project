@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz • {{ course.title }}</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+:root {
+  --bg: #0b1220;
+  --card: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.1);
+  --accent: #22d3ee;
+  --accent2: #5b9cff;
+  --text: #e6eef8;
+  --muted: #9fb7cf;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(135deg, #0b1220, #0f172a);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.header {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header strong {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.progress-container {
+  margin-top: 16px;
+  width: 100%;
+  height: 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  transition: width 0.3s ease;
+}
+
+
+.navigator {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.nav-item {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.nav-item.answered {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #061328;
+  border-color: transparent;
+}
+
+.nav-item:hover {
+  transform: scale(1.1);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: 16px;
+  margin-top: 16px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  scroll-margin-top: 120px; /* smooth scroll offset for header */
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
+.q strong {
+  font-size: 16px;
+}
+
+.opt {
+  background: rgba(255,255,255,0.03);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  margin-top: 10px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: block;
+}
+
+.opt:hover {
+  border-color: var(--accent);
+  background: rgba(34, 211, 238, 0.08);
+}
+
+.opt input[type="radio"] {
+  accent-color: var(--accent);
+  transform: scale(1.2);
+  margin-right: 8px;
+}
+
+.submit {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #061328;
+  padding: 14px;
+  border-radius: 14px;
+  border: 0;
+  width: 100%;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.submit:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(34, 211, 238, 0.4);
+}
+
+.small {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <strong>{{ course.title }} — Quiz</strong>
+        <div class="small">15 questions expected</div>
+      </div>
+      <div>
+        <a href="{{ url_for('student_index') }}" style="color:var(--accent);text-decoration:none;font-weight:600;">⟵ Back</a>
+      </div>
+    </div>
+
+
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+
+    <div class="navigator" id="navigator">
+      {% for q in questions %}
+      <div class="nav-item" id="nav-{{ q.id }}" onclick="document.getElementById('q-{{ q.id }}').scrollIntoView({behavior:'smooth'})">
+        {{ loop.index }}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if last_mark %}
+  <div class="card"><strong>Last score:</strong> {{ last_mark.score }} / {{ questions|length }}</div>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('submit_quiz', course_id=course.id) }}" id="quiz-form">
+    {% for q in questions %}
+    <div class="card q" id="q-{{ q.id }}">
+      <div><strong>{{ loop.index }}. {{ q.question }}</strong></div>
+      <label class="opt"><input type="radio" name="q_{{ q.id }}" value="1" required> {{ q.option1 }}</label>
+      <label class="opt"><input type="radio" name="q_{{ q.id }}" value="2"> {{ q.option2 }}</label>
+      <label class="opt"><input type="radio" name="q_{{ q.id }}" value="3"> {{ q.option3 }}</label>
+      <label class="opt"><input type="radio" name="q_{{ q.id }}" value="4"> {{ q.option4 }}</label>
+    </div>
+    {% endfor %}
+
+    <button class="submit" type="submit">🚀 Submit Quiz</button>
+  </form>
+</div>
+
+<script>
+const totalQuestions = 15;  // fixed at 15
+const form = document.getElementById('quiz-form');
+const progressBar = document.getElementById('progress-bar');
+const navItems = {};
+
+{% for q in questions %}
+  navItems["q_{{ q.id }}"] = document.getElementById("nav-{{ q.id }}");
+{% endfor %}
+
+form.addEventListener('change', () => {
+  const answered = new Set();
+  [...form.elements].forEach(el => {
+    if (el.type === 'radio' && el.checked) {
+      answered.add(el.name);
+      navItems[el.name].classList.add("answered");
+    }
+  });
+  const progress = (answered.size / totalQuestions) * 100;
+  progressBar.style.width = progress + '%';
+});
+</script>
+</body>
+</html>

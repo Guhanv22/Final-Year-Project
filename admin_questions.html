@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Questions • {{ course.title }}</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+  --text: #e6eef8;
+  --muted: #9fb7cf;
+  --accent: #5b9cff;
+  --gradient: linear-gradient(135deg,#22d3ee,#5b9cff);
+  --card-bg: rgba(255,255,255,0.08);
+  --hover: rgba(91,156,255,0.1);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin:0;
+  font-family:'Inter',system-ui,sans-serif;
+  background: linear-gradient(rgba(20,20,20,0.35), rgba(40,40,40,0.35)), url('{{ url_for("static", filename="11.webp") }}') no-repeat center center fixed;
+  background-size: cover;
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.container { max-width:900px; margin:0 auto; padding:24px; }
+
+.header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+.header strong { font-size:1.5rem; }
+.header .small { font-size:0.85rem; color: var(--muted); }
+.header a { color: var(--muted); text-decoration:none; font-weight:500; transition: color 0.3s;}
+.header a:hover { color: var(--accent); }
+
+.card {
+  background: var(--card-bg);
+  padding:20px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 35px rgba(0,0,0,0.4), 0 0 10px rgba(91,156,255,0.2);
+  margin-top:20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 45px rgba(0,0,0,0.5), 0 0 20px rgba(91,156,255,0.3);
+}
+
+.input, select {
+  padding:12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.1);
+  background: rgba(20,20,40,0.6);
+  color: var(--text);
+  width:100%;
+  font-size:0.95rem;
+  transition: border 0.3s, box-shadow 0.3s, background 0.3s;
+}
+.input:focus, select:focus {
+  outline:none;
+  border:1px solid var(--accent);
+  box-shadow:0 0 10px rgba(91,156,255,0.4);
+  background: rgba(20,20,40,0.8);
+}
+
+.row { display:flex; flex-direction:column; gap:12px; }
+
+.btn {
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  font-size:0.95rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34,211,238,0.4), 0 0 12px rgba(91,156,255,0.3);
+}
+.btn-primary { background: var(--gradient); color:#061328; }
+
+.q {
+  padding:12px 10px;
+  border-bottom:1px dashed rgba(255,255,255,0.1);
+  border-radius:6px;
+  cursor:pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.q:hover { background: var(--hover); }
+
+.q-content {
+  display:none;
+  flex-direction:column;
+  margin-top:10px;
+  gap:8px;
+}
+
+.small { color: var(--muted); font-size:13px; }
+
+.action-btns { display:flex; gap:8px; margin-top:6px; }
+.action-btns button {
+  padding:6px 10px;
+  font-size:0.8rem;
+  border-radius:6px;
+  font-weight:500;
+  cursor:pointer;
+  border:none;
+  transition:0.2s, box-shadow 0.2s;
+}
+.action-btns .edit { background:#22d3ee; color:#061328; }
+.action-btns .delete { background:#f87171; color:#061328; }
+.action-btns button:hover { opacity:0.85; box-shadow:0 0 8px rgba(91,156,255,0.4); }
+
+@media(max-width:600px){ .row{gap:8px;} }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <strong>Manage Questions - {{ course.title }}</strong>
+      <div class="small">{{ course.category }}</div>
+    </div>
+    <div><a href="{{ url_for('admin_dashboard') }}">Back</a></div>
+  </div>
+
+  <div class="card">
+    <form method="post" action="{{ url_for('admin_add_question', course_id=course.id) }}" class="row">
+      <input class="input" name="question" placeholder="Question text" required>
+      <input class="input" name="option1" placeholder="Option 1" required>
+      <input class="input" name="option2" placeholder="Option 2" required>
+      <input class="input" name="option3" placeholder="Option 3" required>
+      <input class="input" name="option4" placeholder="Option 4" required>
+      <select class="input" name="answer" required>
+        <option value="1">Option 1 is correct</option>
+        <option value="2">Option 2 is correct</option>
+        <option value="3">Option 3 is correct</option>
+        <option value="4">Option 4 is correct</option>
+      </select>
+      <button class="btn btn-primary" type="submit">Add Question</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h4>Existing Questions</h4>
+    {% for q in questions %}
+      <div class="q" onclick="toggleContent(this)">
+        <div><strong>{{ loop.index }}.</strong> {{ q.question }}</div>
+        <div class="small">Ans: Option {{ q.answer }}</div>
+        <div class="q-content">
+          <form method="post" action="{{ url_for('admin_edit_question', question_id=q.id) }}" class="row">
+            <input class="input" name="question" value="{{ q.question }}" required>
+            <input class="input" name="option1" value="{{ q.option1 }}" required>
+            <input class="input" name="option2" value="{{ q.option2 }}" required>
+            <input class="input" name="option3" value="{{ q.option3 }}" required>
+            <input class="input" name="option4" value="{{ q.option4 }}" required>
+            <select class="input" name="answer" required>
+              <option value="1" {% if q.answer==1 %}selected{% endif %}>Option 1</option>
+              <option value="2" {% if q.answer==2 %}selected{% endif %}>Option 2</option>
+              <option value="3" {% if q.answer==3 %}selected{% endif %}>Option 3</option>
+              <option value="4" {% if q.answer==4 %}selected{% endif %}>Option 4</option>
+            </select>
+            <div class="action-btns">
+              <button type="submit" class="edit">Save</button>
+            </div>
+          </form>
+          <form method="post" action="{{ url_for('admin_delete_question', question_id=q.id) }}" style="margin-top:5px;">
+            <button type="submit" class="delete" onclick="return confirm('Are you sure?');">Delete</button>
+          </form>
+        </div>
+      </div>
+    {% else %}
+      <div class="small">No questions added yet.</div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+function toggleContent(el){
+  const content = el.querySelector('.q-content');
+  content.style.display = content.style.display === "flex" ? "none" : "flex";
+}
+</script>
+</body>
+</html>
