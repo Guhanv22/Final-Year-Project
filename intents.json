@@ -1,0 +1,219 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": ["Hi", "Hello", "Hey", "Good morning", "Good afternoon"],
+      "responses": ["Hello! How can I assist you today?", "Hey there! What can I help you with?", "Hi! What would you like to know today?"]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Bye", "Goodbye", "See you", "Catch you later", "Farewell"],
+      "responses": ["Goodbye! Have a great day!", "See you later! Come back soon.", "Bye! Keep learning!"]
+    },
+    {
+      "tag": "thanks",
+      "patterns": ["Thanks", "Thank you", "Thanks a lot", "Much appreciated"],
+      "responses": ["You're welcome!", "Happy to help!", "Anytime!"]
+    },
+    {
+      "tag": "register",
+      "patterns": ["I want to register", "Sign up", "Create account", "Register me"],
+      "responses": ["You can register by providing your name, email, and password."]
+    },
+    {
+      "tag": "login",
+      "patterns": ["Login", "Sign in", "Access my account", "I want to log in"],
+      "responses": ["Please enter your registered email and password to login."]
+    },
+    {
+      "tag": "logout",
+      "patterns": ["Logout", "Sign out", "Exit account"],
+      "responses": ["You have been logged out successfully."]
+    },
+    {
+      "tag": "view_courses",
+      "patterns": ["Show courses", "What courses are available?", "List all courses"],
+      "responses": ["Here are all available courses in IT and Business categories."]
+    },
+    {
+      "tag": "course_detail",
+      "patterns": ["Tell me about course", "Course details", "Info on course"],
+      "responses": ["You can view the course title, description, video, and enrollment status."]
+    },
+    {
+      "tag": "enroll_course",
+      "patterns": ["Enroll in course", "I want to join a course", "Sign up for course"],
+      "responses": ["You have been successfully enrolled in the course."]
+    },
+    {
+      "tag": "complete_video",
+      "patterns": ["Mark video complete", "I finished the video", "Complete video"],
+      "responses": ["Video marked as complete. You can now take the quiz."]
+    },
+    {
+      "tag": "take_quiz",
+      "patterns": ["Start quiz", "Take quiz", "Answer questions"],
+      "responses": ["Here are your quiz questions. Answer carefully!"]
+    },
+    {
+      "tag": "submit_quiz",
+      "patterns": ["Submit quiz", "Finish quiz", "Send answers"],
+      "responses": ["Your quiz has been submitted. You can view your certificate if eligible."]
+    },
+    {
+      "tag": "view_certificate",
+      "patterns": ["View certificate", "Show my certificate", "Certificate status"],
+      "responses": ["You can view or download your certificate if you scored at least 10 marks."]
+    },
+    {
+      "tag": "download_certificate",
+      "patterns": ["Download certificate", "Get my certificate", "Save certificate PDF"],
+      "responses": ["Your certificate PDF will be generated and downloaded."]
+    },
+    {
+      "tag": "forgot_password",
+      "patterns": ["Forgot password", "Reset password", "Can't login"],
+      "responses": ["Password reset feature is not implemented yet."]
+    },
+    {
+      "tag": "invalid_login",
+      "patterns": ["Invalid login", "Wrong password", "Can't login"],
+      "responses": ["Please check your email and password and try again."]
+    },
+    {
+      "tag": "duplicate_email",
+      "patterns": ["Email already registered", "Sign up error"],
+      "responses": ["The email is already registered. Try logging in instead."]
+    },
+    {
+      "tag": "missing_fields",
+      "patterns": ["Incomplete form", "Missing fields", "Error submitting"],
+      "responses": ["Please fill in all required fields."]
+    },
+    {
+      "tag": "course_not_found",
+      "patterns": ["Course not found", "I can't see the course", "Missing course"],
+      "responses": ["Sorry, the requested course does not exist or you are not enrolled."]
+    },
+    {
+      "tag": "quiz_not_found",
+      "patterns": ["Quiz not found", "No questions", "Quiz missing"],
+      "responses": ["Sorry, there are no questions for this course yet."]
+    },
+    {
+      "tag": "score_query",
+      "patterns": ["My score", "Check marks", "How did I do in the quiz?"],
+      "responses": ["Your latest score for this course is available on your certificate page."]
+    },
+    {
+      "tag": "eligible_certificate",
+      "patterns": ["Am I eligible for certificate?", "Did I pass?", "Can I get certificate?"],
+      "responses": ["You need at least 10 marks to get a certificate."]
+    },
+    {
+      "tag": "video_help",
+      "patterns": ["I can't play video", "Video not loading", "Video problem"],
+      "responses": ["Make sure your video file exists and try refreshing the page."]
+    },
+    {
+      "tag": "course_category",
+      "patterns": ["Course category", "IT or Business?", "Which category?"],
+      "responses": ["Courses are divided into IT and Business categories."]
+    },
+    {
+      "tag": "course_video_url",
+      "patterns": ["Course video link", "Video path", "Video URL"],
+      "responses": ["The course video is available for enrolled users."]
+    },
+    {
+      "tag": "certificate_download_error",
+      "patterns": ["Can't download certificate", "Download failed"],
+      "responses": ["You can only download the certificate if you scored at least 10 marks."]
+    },
+    {
+      "tag": "quiz_answer_format",
+      "patterns": ["Answer format", "How to answer quiz", "Submit answers"],
+      "responses": ["Select one of the four options for each question and submit."]
+    },
+    {
+      "tag": "quiz_score_limit",
+      "patterns": ["Max score", "How many questions", "Quiz points"],
+      "responses": ["Each quiz has a total of all questions available in the course."]
+    },
+    {
+      "tag": "enroll_again",
+      "patterns": ["Enroll again", "Already enrolled", "Join course again"],
+      "responses": ["You are already enrolled in this course."]
+    },
+    {
+      "tag": "user_access_denied",
+      "patterns": ["Access denied", "Not allowed", "Can't view page"],
+      "responses": ["You must be logged in to access this page."]
+    },
+    {
+      "tag": "course_steps",
+      "patterns": ["How to complete a course?", "Steps to finish course", "Guide me through course"],
+      "responses": ["Enroll → Watch all videos → Complete quizzes → Get certificate."]
+    },
+    {
+      "tag": "quiz_steps",
+      "patterns": ["How to take quiz?", "Quiz instructions", "Steps for quiz"],
+      "responses": ["After completing the video, answer all quiz questions and submit to record your score."]
+    },
+    {
+      "tag": "certificate_steps",
+      "patterns": ["How to get certificate?", "Certificate process", "Steps to download certificate"],
+      "responses": ["Score at least 10 marks in the quiz → Go to certificate page → Download PDF."]
+    },
+    {
+      "tag": "enrollment_status",
+      "patterns": ["Am I enrolled?", "Check my course enrollment", "Enrolled courses"],
+      "responses": ["You can view your enrolled courses on your dashboard."]
+    },
+    {
+      "tag": "total_courses",
+      "patterns": ["Total courses available?", "Number of courses", "How many courses?"],
+      "responses": ["Currently we have courses in IT and Business categories."]
+    },
+    {
+      "tag": "quiz_timer",
+      "patterns": ["Is there a time limit?", "Quiz duration", "Timer for quiz"],
+      "responses": ["Each quiz question may have a time limit; complete all questions within that time."]
+    },
+    {
+      "tag": "quiz_score_record",
+      "patterns": ["Is my score recorded?", "How is score saved?", "Score submission"],
+      "responses": ["Your score is automatically recorded when you submit the quiz."]
+    },
+    {
+      "tag": "course_progress",
+      "patterns": ["Check course progress", "My course status", "Progress in course"],
+      "responses": ["You can see which videos are completed and quizzes done in your dashboard."]
+    },
+    {
+      "tag": "quiz_help",
+      "patterns": ["Quiz not loading", "Can't start quiz", "Problem with quiz"],
+      "responses": ["Ensure the video is marked complete before attempting the quiz."]
+    },
+    {
+      "tag": "certificate_format",
+      "patterns": ["What does certificate look like?", "Certificate design", "Certificate layout"],
+      "responses": ["Certificate includes your name, course title, date, and a signature line."]
+    },
+    {
+      "tag": "certificate_date",
+      "patterns": ["Certificate date", "When was certificate issued?"],
+      "responses": ["The certificate shows the completion date as the current date."]
+    },
+    {
+      "tag": "replay_video",
+      "patterns": ["Replay video", "Watch video again", "Video repeat"],
+      "responses": ["You can replay any enrolled course video at any time from the course detail page."]
+    },
+    {
+      "tag": "quiz_feedback",
+      "patterns": ["Quiz feedback", "How did I do?", "Answers correct?"],
+      "responses": ["After submitting, your score is displayed and certificate eligibility is shown."]
+    }
+  ]
+}
